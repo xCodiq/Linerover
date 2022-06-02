@@ -25,7 +25,7 @@ public:
     // Infrared sensor ports
     static const int INFRARED_SENSOR_1_PORT = 3;
     static const int INFRARED_SENSOR_2_PORT = 4;
-    static const int INFRARED_SENSOR_3_PORT = 5;
+    static const int INFRARED_SENSOR_3_PORT = 10;
     static const int INFRARED_SENSOR_4_PORT = 6;
     static const int INFRARED_SENSOR_5_PORT = 7;
 
@@ -37,7 +37,7 @@ public:
 
     // Motor ports
     static const int MOTOR_ACTIVATION_PORT = A0;
-    static const int MOTOR_SPEED_CONTROL_PORT = A1;
+    static const int MOTOR_SPEED_CONTROL_PORT = 5;
     static const int MOTOR_CLOCKWISE_PORT = A2;
     static const int MOTOR_COUNTER_CLOCKWISE_PORT = A3;
 

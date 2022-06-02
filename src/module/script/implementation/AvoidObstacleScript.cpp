@@ -21,6 +21,7 @@ State AvoidObstacleScript::run() {
             } else {
                 this->m_time = millis();
                 this->m_phase = 2; // Switch to phase 2
+                Logger::info("Switched to phase 2");
             }
 
             return State::OBSTACLE;
@@ -31,6 +32,7 @@ State AvoidObstacleScript::run() {
             } else {
                 this->m_time = millis();
                 this->m_phase = 3; // Switch to phase 3
+                Logger::info("Switched to phase 3");
             }
 
             return State::OBSTACLE;

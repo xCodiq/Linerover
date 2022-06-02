@@ -12,7 +12,7 @@ class EchoController : public Controller {
 private:
     // Echo constants
     constexpr const static float SPEED_OF_SOUND = 0.034;
-    const static int DISTANCE_LOWER_BOUND = 5;
+    const static int DISTANCE_LOWER_BOUND = 25;
     const static int DISTANCE_UPPER_BOUND = 40;
 
     // The instance pointer of the EchoController

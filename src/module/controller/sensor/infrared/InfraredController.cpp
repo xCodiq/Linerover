@@ -40,10 +40,20 @@ bool InfraredController::readSensor(int sensorPort) {
 }
 
 Direction InfraredController::checkAlignment() {
-    if (readSensor(Pins::INFRARED_SENSOR_1_PORT)) return Direction::SHARP_LEFT;
-    else if (readSensor(Pins::INFRARED_SENSOR_2_PORT)) return Direction::LEFT;
-    else if (readSensor(Pins::INFRARED_SENSOR_3_PORT)) return Direction::FORWARD;
-    else if (readSensor(Pins::INFRARED_SENSOR_4_PORT)) return Direction::RIGHT;
-    else if (readSensor(Pins::INFRARED_SENSOR_5_PORT)) return Direction::SHARP_RIGHT;
-    else return Direction::UNKNOWN;
+    bool readSensorOne = readSensor(Pins::INFRARED_SENSOR_1_PORT);
+    bool readSensorTwo = readSensor(Pins::INFRARED_SENSOR_2_PORT);
+    bool readSensorThree = readSensor(Pins::INFRARED_SENSOR_3_PORT);
+    bool readSensorFour = readSensor(Pins::INFRARED_SENSOR_4_PORT);
+    bool readSensorFive = readSensor(Pins::INFRARED_SENSOR_5_PORT);
+
+    if ((readSensorOne && readSensorTwo && readSensorThree && readSensorFour && readSensorFive))
+        return Direction::FINISH;
+
+    if (readSensorOne) return Direction::SHARP_LEFT;
+    if (readSensorTwo) return Direction::LEFT;
+    if (readSensorThree) return Direction::FORWARD;
+    if (readSensorFour) return Direction::RIGHT;
+    if (readSensorFive) return Direction::SHARP_RIGHT;
+
+    return Direction::UNKNOWN;
 }

@@ -13,10 +13,11 @@
  */
 enum Direction {
     UNKNOWN = -69,
+    FINISH = -420,
     SHARP_LEFT = 130,
-    LEFT = 118,
-    FORWARD = 105,
-    RIGHT = 88,
+    LEFT = 110 + 4, //118
+    FORWARD = 100,
+    RIGHT = 90 - 4, //88
     SHARP_RIGHT = 68
 };
 

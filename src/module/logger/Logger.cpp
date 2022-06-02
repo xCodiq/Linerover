@@ -5,16 +5,17 @@
 #include "Logger.h"
 
 Logger::Logger(int serialPort) : m_serialPort(serialPort) {
-    instance = this;
+//    instance = this;
     Serial.begin(m_serialPort);
 }
 
 Logger::~Logger() {
-    delete Logger::instance;
+//    delete Logger::instance;
 }
 
 void Logger::configure(int serialPort) {
-    if (instance == nullptr) {
+    if (serialPort != 0) {
+//    if (instance == nullptr) {
         Logger newLogger{serialPort};
         return;
     }
@@ -23,8 +24,6 @@ void Logger::configure(int serialPort) {
 }
 
 void Logger::info(const String &infoMessage) {
-    if (instance->m_serialPort == -1) return;
-
     Serial.print("[INFO] ");
     Serial.println(infoMessage);
 }

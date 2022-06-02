@@ -19,12 +19,13 @@ public:
     static int getSpeed(const State &state) {
         switch (state) {
             case NORMAL:
-                return 75;
+                return 70;
             case ACCELERATE:
                 return 100;
             case OBSTACLE:
-                return 50;
+                return 70;
             case STARTING:
+            case STOPPING:
                 return 0;
         }
     }

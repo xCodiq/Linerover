@@ -11,7 +11,7 @@
 class Logger {
 private:
     // The instance pointer of the Logger
-    static inline Logger *instance = nullptr;
+//    static inline Logger *instance = nullptr;
 
     // The serial port of the logger
     int m_serialPort = -1;

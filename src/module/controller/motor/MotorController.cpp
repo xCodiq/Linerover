@@ -13,7 +13,7 @@ MotorController::MotorController() {
             Pins::MOTOR_SPEED_CONTROL_PORT
     };
 
-    for (const auto &port: ports) pinMode(port, INPUT);
+    for (const auto &port: ports) pinMode(port, OUTPUT);
 
     Logger::info("MotorController has been enabled!");
 }
@@ -39,18 +39,31 @@ void MotorController::adjustSpeed(int speed) {
 }
 
 void MotorController::throttle(const State &state) {
-    // Check if the state is STARTING, if true, only write to the motor activation port
+    // Check if the state is STARTING, if true, start the motor
     if (state == State::STARTING) {
         digitalWrite(Pins::MOTOR_ACTIVATION_PORT, HIGH);
         return;
     }
 
+    // Check if the state is STOPPING, if true, stop the motor
+    if (state == State::STOPPING) {
+        digitalWrite(Pins::MOTOR_ACTIVATION_PORT, LOW);
+//        digitalWrite(Pins::MOTOR_CLOCKWISE_PORT, HIGH);
+//        digitalWrite(Pins::MOTOR_COUNTER_CLOCKWISE_PORT, LOW);
+//        digitalWrite(Pins::MOTOR_ACTIVATION_PORT, HIGH);
+//        adjustSpeed(70);
+//        delay(300);
+//        digitalWrite(Pins::MOTOR_ACTIVATION_PORT, LOW);
+        return;
+    }
+
     // Get the speed for the specified state
+//    int motorSpeed = 60;
     int motorSpeed = MotorSpeed::getSpeed(state);
 
     // Adjust the (counter) clockwise pins and give a HIGH signal to the activation port
-    digitalWrite(Pins::MOTOR_CLOCKWISE_PORT, HIGH);
-    digitalWrite(Pins::MOTOR_COUNTER_CLOCKWISE_PORT, LOW);
+    digitalWrite(Pins::MOTOR_CLOCKWISE_PORT, LOW);
+    digitalWrite(Pins::MOTOR_COUNTER_CLOCKWISE_PORT, HIGH);
     digitalWrite(Pins::MOTOR_ACTIVATION_PORT, HIGH);
 
     // Analog write the motor speed to the motor speed control port

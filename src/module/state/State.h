@@ -10,6 +10,9 @@ enum State {
     // Starting state for the Linerover
     STARTING,
 
+    // Stopping state for the Linerover
+    STOPPING,
+
     // Just following the line, default state
     NORMAL,
 

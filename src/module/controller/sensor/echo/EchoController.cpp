@@ -53,11 +53,12 @@ unsigned int EchoController::echo(const Location &echoLocation) {
 }
 
 ObstacleType EchoController::isObstacleNearby() {
-    unsigned int echoUpper = echo(Location::UPPER);
+//    unsigned int echoUpper = echo(Location::UPPER);
     unsigned int echoLower = echo(Location::LOWER);
 
+    if (echoLower != 0) return ObstacleType::BARRIER;
 //    if (echoLower == 0 && echoUpper == 0) return ObstacleType::NONE;
-    if (echoLower != 0 && echoUpper == 0) return ObstacleType::BARRIER;
+    if (echoLower != 0 && 0 == 0) return ObstacleType::BARRIER;
     if (echoLower != 0) return ObstacleType::SLOPE;
 
     return ObstacleType::NONE;

@@ -148,6 +148,10 @@ bool Linerover::drive() {
                     if (infraredController.readSensor(Pins::INFRARED_SENSOR_3_PORT) ||
                         infraredController.readSensor(Pins::INFRARED_SENSOR_4_PORT)) {
                         stateHandler.currentState() = State::NORMAL;
+
+                        // Set the passed obstacle boolean to true for next iterations
+                        scriptHandler.passedObstacle() = true;
+
                         scriptHandler.obstacleTime() = 0;
                         scriptHandler.obstaclePhase() = 1; // Reset script to phase 1
                     } else stateHandler.currentState() = State::OBSTACLE;

@@ -24,6 +24,26 @@ ScriptHandler &ScriptHandler::get() {
     Logger::error("You haven't configured a ScriptHandler yet!");
 }
 
+unsigned long &ScriptHandler::obstacleTime() {
+    return this->m_obstacle_time;
+}
+
+unsigned long &ScriptHandler::slopeTime() {
+    return this->m_slope_time;
+}
+
+int &ScriptHandler::obstaclePhase() {
+    return this->m_obstacle_phase;
+}
+
+int &ScriptHandler::slopePhase() {
+    return this->m_slope_phase;
+}
+
+bool &ScriptHandler::passedObstacle() {
+    return this->m_passedObstacle;
+}
+
 void ScriptHandler::enableScript(Script *script) {
     m_scripts.push_back(script);
 }

@@ -28,9 +28,7 @@ ServoController &ServoController::get() {
 
 void ServoController::update() {
     this->m_servo.write(this->m_currentDirection);
-//    delay(1);
-
-    Logger::info("Steering " + DirectionUtil::toNameString(this->m_currentDirection));
+    // Logger::info("Steering " + DirectionUtil::toNameString(this->m_currentDirection));
 }
 
 bool ServoController::changeDirection(const Direction &direction) {
@@ -39,7 +37,6 @@ bool ServoController::changeDirection(const Direction &direction) {
 
     // Change the previous direction to the current one, change the current one to the given direction and update servo
     this->m_currentDirection = direction;
-//    this->m_previousDirection = this->m_currentDirection;
     this->update();
 
     // Return true, saying the change of direction was successful

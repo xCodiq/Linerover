@@ -62,7 +62,6 @@ public:
      */
     void update();
 
-    // will not change direction if: m_previousDirection == direction;
     /**
      * Change the direction of the servo motor, the motor controller will not change the
      * direction if the previous direction is equal to the specified direction

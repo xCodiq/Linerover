@@ -3,6 +3,7 @@
 //
 
 #include "EchoController.h"
+#include "module/script/handler/ScriptHandler.h"
 
 EchoController::EchoController() {
     // Set the pin modes of the echo data and the echo trigger port
@@ -53,14 +54,19 @@ unsigned int EchoController::echo(const Location &echoLocation) {
 }
 
 ObstacleType EchoController::isObstacleNearby() {
-//    unsigned int echoUpper = echo(Location::UPPER);
+    // Read the lower echo sensor
     unsigned int echoLower = echo(Location::LOWER);
 
-    if (echoLower != 0) return ObstacleType::BARRIER;
-//    if (echoLower == 0 && echoUpper == 0) return ObstacleType::NONE;
-    if (echoLower != 0 && 0 == 0) return ObstacleType::BARRIER;
-    if (echoLower != 0) return ObstacleType::SLOPE;
+    // Get an instance of the script handler for the echo controller to use
+    auto &scriptHandler = ScriptHandler::get();
 
+    // Check if the obstacle is not passed yet, and the echo lower sees an object from far
+    if (!scriptHandler.passedObstacle() && (echoLower >= 30 && echoLower <= 40)) return ObstacleType::BARRIER;
+
+    // Check if the obstacle IS passed, and the echo lower sees an object from close
+    if (scriptHandler.passedObstacle() && (echoLower >= 5 && echoLower <= 8)) return ObstacleType::SLOPE;
+
+    // There might be an object, but not relevant for the Linerover to respond to
     return ObstacleType::NONE;
 }
 

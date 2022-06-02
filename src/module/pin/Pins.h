@@ -38,8 +38,8 @@ public:
     // Motor ports
     static const int MOTOR_ACTIVATION_PORT = A0;
     static const int MOTOR_SPEED_CONTROL_PORT = 5;
-    static const int MOTOR_CLOCKWISE_PORT = A2;
-    static const int MOTOR_COUNTER_CLOCKWISE_PORT = A3;
+    static const int MOTOR_COUNTER_CLOCKWISE_PORT = A2;
+    static const int MOTOR_CLOCKWISE_PORT = A3;
 
     // Available ports: 12, 13, A5
 };

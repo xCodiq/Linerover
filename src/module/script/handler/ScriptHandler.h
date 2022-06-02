@@ -49,14 +49,39 @@ public:
      */
     static ScriptHandler &get();
 
+    /**
+     * Get/Set the obstacle script time in millis
+     *
+     * @return the obstacle time
+     */
     unsigned long &obstacleTime();
 
+    /**
+     * Get/Set the slope script time in millis
+     *
+     * @return the slope time
+     */
     unsigned long &slopeTime();
 
+    /**
+     * Get/Set the obstacle script phase
+     *
+     * @return the obstacle phase
+     */
     int &obstaclePhase();
 
+    /**
+     * Get/Set the slope script phase
+     *
+     * @return the slope phase
+     */
     int &slopePhase();
 
+    /**
+     * Get/Set if the Linerover passed the obstacle
+     *
+     * @return true if the obstacle is passed, false otherwise
+     */
     bool &passedObstacle();
 
     /**

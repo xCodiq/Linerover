@@ -67,25 +67,51 @@ bool Linerover::drive() {
             ObstacleType obstacleTypeNearby = echoController.isObstacleNearby();
             if (obstacleTypeNearby != ObstacleType::NONE) {
                 State newState = (obstacleTypeNearby == ObstacleType::SLOPE) ? State::ACCELERATE : State::OBSTACLE;
+                if (newState == State::ACCELERATE) delay(500);
+
+                // Change the state to either OBSTACLE or ACCELERATE
                 stateHandler.currentState() = newState;
                 return true;
             }
 
+            // Current cycle was successful, continue to the next
             return true;
         }
         case ACCELERATE: {
-            //todo Make this work
-            // Get the SURPASS_SLOPE script from the script handler
-            Script *script = scriptHandler.getScript(ScriptTarget::SURPASS_SLOPE);
+            // Check if it's the initial run, if true, reset the time field to the current millis
+            if (scriptHandler.slopeTime() == 0) scriptHandler.slopeTime() = millis();
 
-            // Check if the script is pointing to a nullptr, that means it is not enabled properly in startEngine
-            if (script == nullptr) {
-                stateHandler.currentState() = State::NORMAL;
-                return true;
+            switch (scriptHandler.slopePhase()) {
+                case 1: { // PHASE 1: Adjust the speed for half a second to make sure it can make it over the slope
+                    if (millis() - scriptHandler.slopeTime() < 500) { // 0.5 seconds
+                        // Make the Linerover have $ACCELERATE PWM
+                        motorController.adjustSpeed(MotorSpeed::getSpeed(State::ACCELERATE));
+                    } else {
+                        scriptHandler.slopeTime() = millis();
+                        scriptHandler.slopePhase() = 2; // Switch to phase 2
+                    }
+
+                    return true;
+                }
+                case 2: { // PHASE 2: Adjust the speed to 0 for half a second to slow it down when it goes down the slope
+                    if (millis() - scriptHandler.slopeTime() < 500) { // 0.5 seconds
+                        // Make the Linerover have 0 PWM
+                        motorController.adjustSpeed(0);
+                    } else {
+                        scriptHandler.slopeTime() = millis();
+                        scriptHandler.slopePhase() = 3; // Switch to phase 3
+                    }
+
+                    return true;
+                }
+                case 3: // PHASE 3: Set the current state to NORMAL, and reset the script variables
+                default: {
+                    stateHandler.currentState() = State::NORMAL;
+                    scriptHandler.slopeTime() = 0;
+                    scriptHandler.slopePhase() = 1; // Reset script to phase 1
+                    return true;
+                }
             }
-
-            stateHandler.currentState() = script->run();
-            return true;
         }
         case OBSTACLE: {
             // Use the motor controller to throttle the motor, speed is set for each state
@@ -115,28 +141,27 @@ bool Linerover::drive() {
                         scriptHandler.obstaclePhase() = 3; // Switch to phase 3
                     }
 
-                    stateHandler.currentState() = State::OBSTACLE;
                     return true;
                 }
-                case 3: // PHASE 3: Check if the 4th infrared sensor picks up a line, if true, set state to NORMAL
+                case 3: // PHASE 3: Check if the 3rd or 4th infrared sensor picks up a line, if true, set state to NORMAL
                 default: {
-                    if (infraredController.readSensor(Pins::INFRARED_SENSOR_4_PORT)) {
+                    if (infraredController.readSensor(Pins::INFRARED_SENSOR_3_PORT) ||
+                        infraredController.readSensor(Pins::INFRARED_SENSOR_4_PORT)) {
                         stateHandler.currentState() = State::NORMAL;
                         scriptHandler.obstacleTime() = 0;
-                        scriptHandler.obstaclePhase() = 1;
+                        scriptHandler.obstaclePhase() = 1; // Reset script to phase 1
                     } else stateHandler.currentState() = State::OBSTACLE;
                     return true;
                 }
             }
-            return true;
         }
         case STOPPING: {
             // Change the direction to forward
             servoController.changeDirection(Direction::FORWARD);
 
             // Drive backwards for half a second
-            digitalWrite(Pins::MOTOR_CLOCKWISE_PORT, HIGH);
-            digitalWrite(Pins::MOTOR_COUNTER_CLOCKWISE_PORT, LOW);
+            digitalWrite(Pins::MOTOR_COUNTER_CLOCKWISE_PORT, HIGH);
+            digitalWrite(Pins::MOTOR_CLOCKWISE_PORT, LOW);
             analogWrite(Pins::MOTOR_SPEED_CONTROL_PORT, 255);
             delay(500);
 
@@ -154,4 +179,3 @@ bool Linerover::drive() {
             return false;
     }
 }
-

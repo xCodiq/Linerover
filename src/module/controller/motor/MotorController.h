@@ -5,7 +5,7 @@
 #ifndef LINEROVER_MOTORCONTROLLER_H
 #define LINEROVER_MOTORCONTROLLER_H
 
-#include "module/controller/Controller.h"
+#include "../../controller/Controller.h"
 #include "MotorSpeed.h"
 
 class MotorController : public Controller {

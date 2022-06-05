@@ -91,16 +91,8 @@ bool Linerover::drive() {
             // Change the direction to forward
             servoController.changeDirection(Direction::FORWARD);
 
-            // Drive backwards for 620 milliseconds
-            digitalWrite(Pins::MOTOR_COUNTER_CLOCKWISE_PORT, HIGH);
-            digitalWrite(Pins::MOTOR_CLOCKWISE_PORT, LOW);
-            analogWrite(Pins::MOTOR_SPEED_CONTROL_PORT, 255);
-            delay(620);
-
-            // Set the speed to 0, and disable the motor after 1 second
-            analogWrite(Pins::MOTOR_SPEED_CONTROL_PORT, 0);
-            delay(1000);
-            digitalWrite(Pins::MOTOR_ACTIVATION_PORT, LOW);
+            // Use the motor controller to throttle the motor, speed is set for each state
+            motorController.throttle(currentState);
 
             // Return false so the Linerover stops working, unless you reset/reboot
             return false;

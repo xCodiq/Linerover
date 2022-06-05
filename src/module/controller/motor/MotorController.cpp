@@ -39,6 +39,21 @@ void MotorController::throttle(const State &state) {
         return;
     }
 
+    // Check if the state is STOPPING, if true, run the motor stopping script
+    if (state == State::STOPPING) {
+        // Drive backwards for 620 milliseconds
+        digitalWrite(Pins::MOTOR_COUNTER_CLOCKWISE_PORT, HIGH);
+        digitalWrite(Pins::MOTOR_CLOCKWISE_PORT, LOW);
+        analogWrite(Pins::MOTOR_SPEED_CONTROL_PORT, 255);
+        delay(620);
+
+        // Set the speed to 0, and disable the motor after 1 second
+        analogWrite(Pins::MOTOR_SPEED_CONTROL_PORT, 0);
+        delay(1000);
+        digitalWrite(Pins::MOTOR_ACTIVATION_PORT, LOW);
+        return;
+    }
+
     // Get the speed for the specified state
     int motorSpeed = MotorSpeed::getSpeed(state);
 

@@ -12,6 +12,7 @@ class AvoidObstacleScript : public Script {
 private:
     unsigned long m_time = 0;
     int m_phase = 1;
+
 public:
     AvoidObstacleScript() = default;
 

@@ -5,10 +5,12 @@
 #ifndef LINEROVER_SCRIPT_H
 #define LINEROVER_SCRIPT_H
 
-#include "module/controller/motor/MotorController.h"
-#include "module/controller/servo/ServoController.h"
-#include "module/controller/sensor/echo/EchoController.h"
-#include "module/controller/sensor/infrared/InfraredController.h"
+#include "../controller/Controller.h"
+#include "../controller/motor/MotorController.h"
+#include "../controller/servo/ServoController.h"
+#include "../controller/sensor/echo/EchoController.h"
+#include "../controller/sensor/infrared/InfraredController.h"
+#include "handler/ScriptHandler.h"
 
 enum ScriptTarget {
     // Script Target for avoiding the obstacle

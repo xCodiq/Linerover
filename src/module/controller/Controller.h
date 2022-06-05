@@ -6,11 +6,10 @@
 #define LINEROVER_CONTROLLER_H
 
 #include <Arduino.h>
-#include <Vector.h>
 
-#include "module/state/State.h"
-#include "module/logger/Logger.h"
-#include "module/pin/Pins.h"
+#include "../state/State.h"
+#include "../logger/Logger.h"
+#include "../pin/Pins.h"
 
 /**
  * Every module of the Linerover will have it's own Controller

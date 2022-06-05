@@ -8,6 +8,10 @@
 #include "../Script.h"
 
 class SurpassSlopeScript : public Script {
+private:
+    unsigned long m_time = 0;
+    int m_phase = 1;
+
 public:
     SurpassSlopeScript() = default;
 

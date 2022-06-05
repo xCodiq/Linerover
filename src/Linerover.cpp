@@ -65,7 +65,6 @@ bool Linerover::drive() {
             ObstacleType obstacleTypeNearby = echoController.isObstacleNearby();
             if (obstacleTypeNearby != ObstacleType::NONE) {
                 State newState = (obstacleTypeNearby == ObstacleType::SLOPE) ? State::ACCELERATE : State::OBSTACLE;
-                if (newState == State::ACCELERATE) delay(1000);
 
                 // Change the state to either OBSTACLE or ACCELERATE
                 stateHandler.currentState() = newState;
@@ -76,103 +75,17 @@ bool Linerover::drive() {
             return true;
         }
         case ACCELERATE: {
-            // Check if it's the initial run, if true, reset the time field to the current millis
-            if (scriptHandler.slopeTime() == 0) scriptHandler.slopeTime() = millis();
-
-            switch (scriptHandler.slopePhase()) {
-                case 1: { // PHASE 1: Drive backwards to make some room for full acceleration
-                    if (millis() - scriptHandler.slopeTime() < 150) { // 0.150 seconds
-                        // Set the motor to counterclockwise
-                        digitalWrite(Pins::MOTOR_COUNTER_CLOCKWISE_PORT, HIGH);
-                        digitalWrite(Pins::MOTOR_CLOCKWISE_PORT, LOW);
-
-                        analogWrite(Pins::MOTOR_SPEED_CONTROL_PORT, 255);
-                        digitalWrite(Pins::MOTOR_ACTIVATION_PORT, HIGH);
-                    } else {
-                        scriptHandler.slopeTime() = millis();
-                        scriptHandler.slopePhase() = 2; // Switch to phase 2
-                    }
-
-                    return true;
-                }
-                case 2: { // PHASE 2: Adjust the speed for half a second to make sure it can make it over the slope
-                    if (millis() - scriptHandler.slopeTime() < 2000) { // 2 seconds
-                        // Make the Linerover have $ACCELERATE PWM
-                        digitalWrite(Pins::MOTOR_COUNTER_CLOCKWISE_PORT, LOW);
-                        digitalWrite(Pins::MOTOR_CLOCKWISE_PORT, HIGH);
-                        motorController.adjustSpeed(MotorSpeed::getSpeed(State::ACCELERATE));
-                    } else {
-                        scriptHandler.slopeTime() = millis();
-                        scriptHandler.slopePhase() = 3; // Switch to phase 3
-                    }
-
-                    return true;
-                }
-                case 3: { // PHASE 3: Adjust the speed to 0 for half a second to slow it down when it goes down the slope
-                    if (millis() - scriptHandler.slopeTime() < 500) { // 0.5 seconds
-                        // Make the Linerover have 0 PWM
-                        motorController.adjustSpeed(0);
-                    } else {
-                        scriptHandler.slopeTime() = millis();
-                        scriptHandler.slopePhase() = 4; // Switch to phase 4
-                    }
-
-                    return true;
-                }
-                case 4: // PHASE 4: Set the current state to NORMAL, and reset the script variables
-                default: {
-                    stateHandler.currentState() = State::NORMAL;
-                    scriptHandler.slopeTime() = 0;
-                    scriptHandler.slopePhase() = 1; // Reset script to phase 1
-                    return true;
-                }
-            }
+            // Get the avoid obstacle script, and run it
+            SurpassSlopeScript surpassSlopeScript = scriptHandler.getSurpassSlopeScript();
+            return (stateHandler.currentState() = surpassSlopeScript.run()) != State::STARTING;
         }
         case OBSTACLE: {
             // Use the motor controller to throttle the motor, speed is set for each state
             motorController.throttle(currentState);
 
-            // Check if it's the initial run, if true, reset the time field to the current millis
-            if (scriptHandler.obstacleTime() == 0) scriptHandler.obstacleTime() = millis();
-
-            switch (scriptHandler.obstaclePhase()) {
-                case 1: { // PHASE 1: Steer to the right, to make room for a turn
-                    if (millis() - scriptHandler.obstacleTime() < 780) {
-                        // Make the Linerover steer to the right
-                        servoController.changeDirection(Direction::RIGHT_OBSTACLE);
-                    } else {
-                        scriptHandler.obstacleTime() = millis();
-                        scriptHandler.obstaclePhase() = 2; // Switch to phase 2
-                    }
-
-                    return true;
-                }
-                case 2: { // PHASE 2: Steer to the left, so the it'll turn back to the white line
-                    if (millis() - scriptHandler.obstacleTime() < 100) {
-                        // Make the Linerover steer to the left
-                        servoController.changeDirection(Direction::LEFT_OBSTACLE);
-                    } else {
-                        scriptHandler.obstacleTime() = millis();
-                        scriptHandler.obstaclePhase() = 3; // Switch to phase 3
-                    }
-
-                    return true;
-                }
-                case 3: // PHASE 3: Check if the 3rd or 4th infrared sensor picks up a line, if true, set state to NORMAL
-                default: {
-                    if (infraredController.readSensor(Pins::INFRARED_SENSOR_3_PORT) ||
-                        infraredController.readSensor(Pins::INFRARED_SENSOR_4_PORT)) {
-                        stateHandler.currentState() = State::NORMAL;
-
-                        // Set the passed obstacle boolean to true for next iterations
-                        scriptHandler.passedObstacle() = true;
-
-                        scriptHandler.obstacleTime() = 0;
-                        scriptHandler.obstaclePhase() = 1; // Reset script to phase 1
-                    } else stateHandler.currentState() = State::OBSTACLE;
-                    return true;
-                }
-            }
+            // Get the avoid obstacle script, and run it
+            AvoidObstacleScript avoidObstacleScript = scriptHandler.getAvoidObstacleScript();
+            return (stateHandler.currentState() = avoidObstacleScript.run()) != State::STARTING;
         }
         case STOPPING: {
             // Change the direction to forward

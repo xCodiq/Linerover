@@ -1,7 +1,7 @@
 #include "Linerover.h"
 
 bool RUNNING = false;
-bool LOGGING = true;
+bool LOGGING = false;
 
 void setup() {
     // Configure the linerover logger

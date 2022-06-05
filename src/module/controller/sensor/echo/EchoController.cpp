@@ -13,7 +13,7 @@ EchoController::EchoController() {
     pinMode(Pins::ECHO_TRIGGER2_PORT, OUTPUT);
     pinMode(Pins::ECHO_DATA2_PORT, INPUT);
 
-    Logger::info("EchoController has been enabled!");
+    //Logger::info("EchoController has been enabled!");
 }
 
 EchoController::~EchoController() {
@@ -23,13 +23,13 @@ EchoController::~EchoController() {
 EchoController &EchoController::configure() {
     if (instance == nullptr) return *(instance = new EchoController{});
 
-    Logger::error("You are not allowed to configure a EchoController twice!");
+    //Logger::error("You are not allowed to configure a EchoController twice!");
 }
 
 EchoController &EchoController::get() {
     if (instance != nullptr) return *instance;
 
-    Logger::error("You haven't configured a EchoController yet!");
+    //Logger::error("You haven't configured a EchoController yet!");
 }
 
 unsigned int EchoController::echo(const Location &echoLocation) {
@@ -61,10 +61,10 @@ ObstacleType EchoController::isObstacleNearby() {
     auto &scriptHandler = ScriptHandler::get();
 
     // Check if the obstacle is not passed yet, and the echo lower sees an object from far
-    if (!scriptHandler.passedObstacle() && (echoLower >= 30 && echoLower <= 40)) return ObstacleType::BARRIER;
+    if (!scriptHandler.passedObstacle() && (echoLower >= 15 && echoLower <= 23)) return ObstacleType::BARRIER;
 
     // Check if the obstacle IS passed, and the echo lower sees an object from close
-    if (scriptHandler.passedObstacle() && (echoLower >= 5 && echoLower <= 8)) return ObstacleType::SLOPE;
+//    if (scriptHandler.passedObstacle() && (echoLower >= 3 && echoLower <= 6)) return ObstacleType::SLOPE;
 
     // There might be an object, but not relevant for the Linerover to respond to
     return ObstacleType::NONE;

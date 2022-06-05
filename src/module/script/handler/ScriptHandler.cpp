@@ -5,7 +5,7 @@
 #include "ScriptHandler.h"
 
 ScriptHandler::ScriptHandler() {
-    Logger::info("ScriptHandler has been enabled!");
+    //Logger::info("ScriptHandler has been enabled!");
 }
 
 ScriptHandler::~ScriptHandler() {
@@ -15,13 +15,13 @@ ScriptHandler::~ScriptHandler() {
 ScriptHandler &ScriptHandler::configure() {
     if (instance == nullptr) return *(instance = new ScriptHandler{});
 
-    Logger::error("You are not allowed to configure a ScriptHandler twice!");
+    //Logger::error("You are not allowed to configure a ScriptHandler twice!");
 }
 
 ScriptHandler &ScriptHandler::get() {
     if (instance != nullptr) return *instance;
 
-    Logger::error("You haven't configured a ScriptHandler yet!");
+    //Logger::error("You haven't configured a ScriptHandler yet!");
 }
 
 unsigned long &ScriptHandler::obstacleTime() {

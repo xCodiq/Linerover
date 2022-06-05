@@ -21,9 +21,9 @@ public:
             case NORMAL:
                 return 70;
             case ACCELERATE:
-                return 100;
+                return 210;
             case OBSTACLE:
-                return 70;
+                return 64;
             case STARTING:
             case STOPPING:
                 return 0;

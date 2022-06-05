@@ -7,7 +7,7 @@
 ServoController::ServoController(int servoPort) : m_servoPort(servoPort), m_servo({}) {
     this->m_servo.attach(this->m_servoPort);
 
-    Logger::info("ServoController has been enabled!");
+    //Logger::info("ServoController has been enabled!");
 }
 
 ServoController::~ServoController() {
@@ -17,18 +17,18 @@ ServoController::~ServoController() {
 ServoController &ServoController::configure(int port) {
     if (instance == nullptr) return *(instance = new ServoController{port});
 
-    Logger::error("You are not allowed to configure a ServoController twice!");
+    //Logger::error("You are not allowed to configure a ServoController twice!");
 }
 
 ServoController &ServoController::get() {
     if (instance != nullptr) return *instance;
 
-    Logger::error("You haven't configured a ServoController yet!");
+    //Logger::error("You haven't configured a ServoController yet!");
 }
 
 void ServoController::update() {
     this->m_servo.write(this->m_currentDirection);
-    // Logger::info("Steering " + DirectionUtil::toNameString(this->m_currentDirection));
+    //Logger::info("Steering " + DirectionUtil::toNameString(this->m_currentDirection));
 }
 
 bool ServoController::changeDirection(const Direction &direction) {

@@ -41,7 +41,7 @@ public:
     static const int MOTOR_COUNTER_CLOCKWISE_PORT = A2;
     static const int MOTOR_CLOCKWISE_PORT = A3;
 
-    // Available ports: 12, 13, A5
+    // Available ports: D12, D13, A1, A4, A5
 };
 
 

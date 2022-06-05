@@ -14,8 +14,6 @@ MotorController::MotorController() {
     };
 
     for (const auto &port: ports) pinMode(port, OUTPUT);
-
-    Logger::info("MotorController has been enabled!");
 }
 
 MotorController::~MotorController() {
@@ -23,15 +21,11 @@ MotorController::~MotorController() {
 }
 
 MotorController &MotorController::configure() {
-    if (instance == nullptr) return *(instance = new MotorController{});
-
-    Logger::error("You are not allowed to configure a MotorController twice!");
+    return *(instance = new MotorController{});
 }
 
 MotorController &MotorController::get() {
-    if (instance != nullptr) return *instance;
-
-    Logger::error("You haven't configured a MotorController yet!");
+    return *instance;
 }
 
 void MotorController::adjustSpeed(int speed) {

@@ -26,6 +26,7 @@ public:
                 return 64;
             case STARTING:
             case STOPPING:
+            default:
                 return 0;
         }
     }

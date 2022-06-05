@@ -5,17 +5,14 @@
 #include "Logger.h"
 
 Logger::Logger(int serialPort) : m_serialPort(serialPort) {
-//    instance = this;
     Serial.begin(m_serialPort);
 }
 
 Logger::~Logger() {
-//    delete Logger::instance;
 }
 
 void Logger::configure(int serialPort) {
     if (serialPort != 0) {
-//    if (instance == nullptr) {
         Logger newLogger{serialPort};
         return;
     }

@@ -5,8 +5,6 @@
 #include "Linerover.h"
 
 void Linerover::startEngine() {
-//    Logger::info("Starting engine...");
-
     // Get the state handler, and set the starting state to NORMAL
     auto &stateHandler = StateHandler::get();
     stateHandler.currentState() = State::STARTING;
@@ -82,11 +80,9 @@ bool Linerover::drive() {
             if (scriptHandler.slopeTime() == 0) scriptHandler.slopeTime() = millis();
 
             switch (scriptHandler.slopePhase()) {
-                case 1: {
-                    if (millis() - scriptHandler.slopeTime() < 150) { // 0.5 seconds
-                        // Make the Linerover have $ACCELERATE PWM
-
-                        // Drive backwards for half a second
+                case 1: { // PHASE 1: Drive backwards to make some room for full acceleration
+                    if (millis() - scriptHandler.slopeTime() < 150) { // 0.150 seconds
+                        // Set the motor to counterclockwise
                         digitalWrite(Pins::MOTOR_COUNTER_CLOCKWISE_PORT, HIGH);
                         digitalWrite(Pins::MOTOR_CLOCKWISE_PORT, LOW);
 
@@ -99,31 +95,31 @@ bool Linerover::drive() {
 
                     return true;
                 }
-                case 2: { // PHASE 1: Adjust the speed for half a second to make sure it can make it over the slope
-                    if (millis() - scriptHandler.slopeTime() < 2000) { // 0.5 seconds
+                case 2: { // PHASE 2: Adjust the speed for half a second to make sure it can make it over the slope
+                    if (millis() - scriptHandler.slopeTime() < 2000) { // 2 seconds
                         // Make the Linerover have $ACCELERATE PWM
                         digitalWrite(Pins::MOTOR_COUNTER_CLOCKWISE_PORT, LOW);
                         digitalWrite(Pins::MOTOR_CLOCKWISE_PORT, HIGH);
                         motorController.adjustSpeed(MotorSpeed::getSpeed(State::ACCELERATE));
                     } else {
                         scriptHandler.slopeTime() = millis();
-                        scriptHandler.slopePhase() = 3; // Switch to phase 2
+                        scriptHandler.slopePhase() = 3; // Switch to phase 3
                     }
 
                     return true;
                 }
-                case 3: { // PHASE 2: Adjust the speed to 0 for half a second to slow it down when it goes down the slope
+                case 3: { // PHASE 3: Adjust the speed to 0 for half a second to slow it down when it goes down the slope
                     if (millis() - scriptHandler.slopeTime() < 500) { // 0.5 seconds
                         // Make the Linerover have 0 PWM
                         motorController.adjustSpeed(0);
                     } else {
                         scriptHandler.slopeTime() = millis();
-                        scriptHandler.slopePhase() = 4; // Switch to phase 3
+                        scriptHandler.slopePhase() = 4; // Switch to phase 4
                     }
 
                     return true;
                 }
-                case 4: // PHASE 3: Set the current state to NORMAL, and reset the script variables
+                case 4: // PHASE 4: Set the current state to NORMAL, and reset the script variables
                 default: {
                     stateHandler.currentState() = State::NORMAL;
                     scriptHandler.slopeTime() = 0;
@@ -182,7 +178,7 @@ bool Linerover::drive() {
             // Change the direction to forward
             servoController.changeDirection(Direction::FORWARD);
 
-            // Drive backwards for half a second
+            // Drive backwards for 620 milliseconds
             digitalWrite(Pins::MOTOR_COUNTER_CLOCKWISE_PORT, HIGH);
             digitalWrite(Pins::MOTOR_CLOCKWISE_PORT, LOW);
             analogWrite(Pins::MOTOR_SPEED_CONTROL_PORT, 255);

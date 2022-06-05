@@ -28,7 +28,7 @@ enum ObstacleType {
 
 enum Location {
     // The upper location of an echo sensor
-    UPPER,
+    UPPER, // unused
 
     // The lower location of an echo sensor
     LOWER

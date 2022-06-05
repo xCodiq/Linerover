@@ -15,8 +15,6 @@ InfraredController::InfraredController() {
     };
 
     for (const auto &port: ports) pinMode(port, INPUT);
-
-    //Logger::info("InfraredController has been enabled!");
 }
 
 InfraredController::~InfraredController() {
@@ -24,15 +22,11 @@ InfraredController::~InfraredController() {
 }
 
 InfraredController &InfraredController::configure() {
-    if (instance == nullptr) return *(instance = new InfraredController{});
-
-    //Logger::error("You are not allowed to configure a InfraredController twice!");
+    return *(instance = new InfraredController{});
 }
 
 InfraredController &InfraredController::get() {
-    if (instance != nullptr) return *instance;
-
-    //Logger::error("You haven't configured a InfraredController yet!");
+    return *instance;
 }
 
 bool InfraredController::readSensor(int sensorPort) {

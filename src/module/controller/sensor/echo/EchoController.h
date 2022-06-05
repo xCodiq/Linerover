@@ -41,7 +41,6 @@ public:
      */
     static EchoController &get();
 
-    // return int; the distance
     /**
      * Let the Linerover use it's echo sensors to echo for nearby objects it's encountering
      *

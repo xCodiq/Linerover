@@ -12,5 +12,5 @@ EchoSensorPorts Echo::getPorts(const Location &sensorLocation) {
             return {Pins::ECHO_DATA2_PORT, Pins::ECHO_TRIGGER2_PORT};
         default:
             return {-1, -1};
-    };
+    }
 }

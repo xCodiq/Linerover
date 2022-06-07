@@ -30,9 +30,7 @@ private:
     Servo m_servo;
 
     // The current direction the servo is pointing to
-    Direction m_currentDirection = Direction::FORWARD,
-    // The previous direction the servo was pointing to
-    m_previousDirection = m_currentDirection;
+    Direction m_currentDirection = Direction::FORWARD;
 
     explicit ServoController(int servoPort);
 

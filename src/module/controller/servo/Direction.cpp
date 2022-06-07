@@ -17,6 +17,9 @@ String DirectionUtil::toNameString(const Direction &direction) {
         case Direction::SHARP_RIGHT:
             return "Sharp Right";
         case Direction::UNKNOWN:
+        case FINISH:
+        case LEFT_OBSTACLE:
+        case RIGHT_OBSTACLE:
             return "Unknown";
     }
 }

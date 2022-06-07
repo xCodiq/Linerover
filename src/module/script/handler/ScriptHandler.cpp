@@ -4,7 +4,7 @@
 
 #include "ScriptHandler.h"
 
-ScriptHandler::ScriptHandler() : m_passedObstacle(false), m_avoidObstacleScript{}, m_surpassSlopeScript{} {
+ScriptHandler::ScriptHandler() : m_avoidObstacleScript{}, m_surpassSlopeScript{}, m_passedObstacle(false) {
 }
 
 ScriptHandler::~ScriptHandler() {

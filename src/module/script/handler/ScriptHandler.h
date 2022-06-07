@@ -46,9 +46,9 @@ public:
      */
     static ScriptHandler &get();
 
-    AvoidObstacleScript getAvoidObstacleScript();
+    AvoidObstacleScript &getAvoidObstacleScript();
 
-    SurpassSlopeScript getSurpassSlopeScript();
+    SurpassSlopeScript &getSurpassSlopeScript();
 
     /**
      * Get/Set if the Linerover passed the obstacle
